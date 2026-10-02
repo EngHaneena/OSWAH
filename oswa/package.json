@@ -1,0 +1,39 @@
+{
+  "name": "oswa",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.131.0",
+    "@resvg/resvg-js": "^2.6.2",
+    "@supabase/ssr": "^0.12.7",
+    "@supabase/supabase-js": "^2.109.0",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.3",
+    "@vitejs/plugin-react": "^4.7.0",
+    "@xenova/transformers": "^2.17.2",
+    "dotenv": "^18.0.5",
+    "jsdom": "^27.0.1",
+    "next": "16.3.8",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "ts-node": "^10.9.2",
+    "vitest": "^4.1.11",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20.19.43",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.3.8",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}
