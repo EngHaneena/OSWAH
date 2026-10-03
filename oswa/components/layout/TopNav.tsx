@@ -18,6 +18,7 @@ export default function TopNav() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [themeMenuOpen, setThemeMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   // User state
   const [loadingUser, setLoadingUser] = useState(true);
@@ -28,6 +29,10 @@ export default function TopNav() {
   const themeRef = useRef<HTMLDivElement>(null);
   const userRef = useRef<HTMLDivElement>(null);
   const drawerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Track scroll position for height shrinking
   useEffect(() => {
@@ -251,7 +256,9 @@ export default function TopNav() {
                 className="p-2 rounded-xl text-[var(--color-ink-light)] dark:text-[#c4ceb8] hover:text-[var(--color-ink)] dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-gold)] border border-transparent hover:border-[var(--color-gold)]/20"
                 title={t('nav.theme')}
               >
-                {resolvedTheme === 'dark' ? (
+                {!mounted ? (
+                  <div className="w-5 h-5" />
+                ) : resolvedTheme === 'dark' ? (
                   /* Moon icon */
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />

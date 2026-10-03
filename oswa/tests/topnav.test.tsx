@@ -124,4 +124,23 @@ describe('Requirement 1 & 2: TopNav and Mobile Drawer', () => {
 
     expect(screen.queryByRole('dialog', { name: /القائمة الرئيسية|Main Menu/i })).not.toBeInTheDocument();
   });
+
+  it('Requirement: Theme toggle mounts safely without hydration mismatch', async () => {
+    render(
+      <ThemeProvider>
+        <LanguageProvider>
+          <TopNav />
+        </LanguageProvider>
+      </ThemeProvider>
+    );
+
+    const themeToggleBtn = screen.getByTitle(/مظهر الموقع|المظهر|Theme/i);
+    expect(themeToggleBtn).toBeInTheDocument();
+
+    // After mounted, svg icon is rendered inside button
+    await waitFor(() => {
+      const svg = themeToggleBtn.querySelector('svg');
+      expect(svg).toBeInTheDocument();
+    });
+  });
 });
