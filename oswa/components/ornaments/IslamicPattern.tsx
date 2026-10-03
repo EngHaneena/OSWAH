@@ -91,3 +91,22 @@ export function VerseFrame({ children, className = '' }: { children: React.React
     </div>
   );
 }
+
+export function IslamicCardFrame({
+  children,
+  className = '',
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <div className={`relative rounded-3xl border border-[var(--color-gold)]/25 ${className}`}>
+      <span className="absolute -top-1.5 -start-1.5 text-[var(--color-gold)] text-xs select-none" aria-hidden="true">✦</span>
+      <span className="absolute -top-1.5 -end-1.5 text-[var(--color-gold)] text-xs select-none" aria-hidden="true">✦</span>
+      <span className="absolute -bottom-1.5 -start-1.5 text-[var(--color-gold)] text-xs select-none" aria-hidden="true">✦</span>
+      <span className="absolute -bottom-1.5 -end-1.5 text-[var(--color-gold)] text-xs select-none" aria-hidden="true">✦</span>
+      {children}
+    </div>
+  );
+}
+

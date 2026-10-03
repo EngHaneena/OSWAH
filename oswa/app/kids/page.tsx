@@ -1,63 +1,110 @@
+'use client';
+
+import React from 'react';
 import Link from 'next/link';
-import Navbar from '@/components/layout/Navbar';
+import { useTranslation } from '@/lib/i18n';
+import KidsAnimatedBackground from '@/components/kids/KidsAnimatedBackground';
 
 export default function KidsMenuPage() {
+  const { t, dir, isArabic } = useTranslation();
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#FFF8F0] to-[#E8F8F0] flex flex-col" dir="rtl">
-      <Navbar />
-      
-      <main className="flex-1 px-4 py-12 max-w-4xl mx-auto w-full flex flex-col items-center">
-        <header className="text-center mb-12 animate-fade-in-up">
-          <h1 className="text-5xl md:text-6xl text-[#E07B39] mb-4 drop-shadow-sm" style={{ fontFamily: 'Baloo Bhaijaan 2, cursive' }}>
-            ⭐ ركن الأطفال ⭐
+    <div
+      className="min-h-[calc(100vh-4rem)] bg-gradient-to-br from-[#FEF9C3] via-[#E0F2FE] to-[#FCE7F3] dark:bg-gradient-to-b dark:from-slate-900 dark:via-indigo-950 dark:to-purple-950 relative overflow-hidden flex flex-col items-center justify-center px-4 py-12 transition-colors duration-500"
+      dir={dir}
+    >
+      {/* Cartoon animated elements: drifting clouds, smiling crescent moon, stars, balloons */}
+      <KidsAnimatedBackground />
+
+      <main className="relative z-10 max-w-4xl mx-auto w-full flex flex-col items-center">
+        {/* Playful Header */}
+        <header className="text-center mb-10 animate-fade-in-up">
+          <div className="inline-flex items-center justify-center gap-2 mb-3 text-4xl sm:text-5xl animate-bounce">
+            <span>⭐</span>
+            <span className="text-amber-500 dark:text-yellow-300">🎈</span>
+            <span>⭐</span>
+          </div>
+
+          <h1
+            className="text-5xl sm:text-6xl md:text-7xl font-bold text-amber-600 dark:text-yellow-300 mb-4 drop-shadow-sm font-kids tracking-wide"
+            style={{ fontFamily: 'Baloo Bhaijaan 2, cursive' }}
+          >
+            {t('kids.title')}
           </h1>
-          <p className="text-[#48CAE4] text-xl md:text-2xl font-bold bg-white/60 px-6 py-2 rounded-full inline-block shadow-sm" style={{ fontFamily: 'Baloo Bhaijaan 2, cursive' }}>
-            ماذا تريد أن تفعل اليوم يا بطل؟
+
+          <p
+            className="text-lg sm:text-xl md:text-2xl font-bold text-[#1E293B] bg-white/75 dark:bg-[#F5F2EB] px-8 py-3 rounded-full inline-block shadow-md border border-amber-500/20 backdrop-blur-md transition-colors"
+            style={{ fontFamily: 'Baloo Bhaijaan 2, cursive' }}
+          >
+            {t('kids.subtitle')}
           </p>
         </header>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-3xl">
-          {/* كرت القصة */}
-          <Link 
+        {/* Kids Action Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-3xl">
+          {/* Interactive Story Card */}
+          <Link
             href="/kids/story"
-            className="group flex flex-col items-center justify-center gap-6 bg-white rounded-[3rem] p-10 shadow-lg border-4 border-transparent hover:border-[#48CAE4] hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 animate-fade-in-up"
+            className="group flex flex-col items-center justify-between text-center gap-6 bg-white/90 dark:bg-[#F5F2EB] rounded-[2.5rem] p-8 sm:p-10 shadow-xl border-4 border-sky-300/80 dark:border-sky-400/40 hover:border-sky-400 hover:shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95 animate-fade-in-up relative overflow-hidden"
             style={{ animationDelay: '0.1s' }}
           >
-            <div className="text-8xl transform group-hover:scale-110 transition-transform duration-300">
+            <div className="w-28 h-28 rounded-full bg-sky-100 dark:bg-sky-200/60 flex items-center justify-center text-6xl transform group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 shadow-inner">
               📚
             </div>
-            <div className="text-center">
-              <h2 className="text-4xl text-[#48CAE4] mb-2" style={{ fontFamily: 'Baloo Bhaijaan 2, cursive' }}>
-                قصة تفاعلية
+
+            <div className="space-y-2">
+              <h2
+                className="text-3xl sm:text-4xl font-bold text-sky-600 dark:text-sky-700"
+                style={{ fontFamily: 'Baloo Bhaijaan 2, cursive' }}
+              >
+                {t('kids.storyTitle')}
               </h2>
-              <p className="text-gray-500 font-medium text-lg">
-                اقرأ قصة ممتعة من سيرة الصحابة وشارك في أحداثها!
+              <p className="text-slate-600 dark:text-slate-700 font-medium text-base sm:text-lg leading-relaxed">
+                {t('kids.storyDesc')}
               </p>
             </div>
-            <div className="mt-2 bg-[#48CAE4] text-white px-8 py-3 rounded-full font-bold text-xl opacity-0 group-hover:opacity-100 transition-opacity" style={{ fontFamily: 'Baloo Bhaijaan 2' }}>
-              ابدأ القراءة ⬅️
+
+            <div
+              className="w-full mt-2 py-3.5 px-6 rounded-full font-bold text-lg sm:text-xl text-white bg-gradient-to-r from-sky-400 to-sky-500 shadow-md group-hover:shadow-lg transition-all flex items-center justify-center gap-2"
+              style={{ fontFamily: 'Baloo Bhaijaan 2, cursive' }}
+            >
+              <span>{t('kids.storyBtn')}</span>
+              <span className={`transform transition-transform ${isArabic ? 'group-hover:-translate-x-1' : 'group-hover:translate-x-1'}`}>
+                {isArabic ? '⬅️' : '➡️'}
+              </span>
             </div>
           </Link>
 
-          {/* كرت اللعبة */}
-          <Link 
+          {/* Matching Game Card */}
+          <Link
             href="/kids/game"
-            className="group flex flex-col items-center justify-center gap-6 bg-white rounded-[3rem] p-10 shadow-lg border-4 border-transparent hover:border-[#F4A261] hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 animate-fade-in-up"
+            className="group flex flex-col items-center justify-between text-center gap-6 bg-white/90 dark:bg-[#F5F2EB] rounded-[2.5rem] p-8 sm:p-10 shadow-xl border-4 border-amber-300/80 dark:border-amber-400/40 hover:border-amber-400 hover:shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95 animate-fade-in-up relative overflow-hidden"
             style={{ animationDelay: '0.2s' }}
           >
-            <div className="text-8xl transform group-hover:scale-110 transition-transform duration-300">
+            <div className="w-28 h-28 rounded-full bg-amber-100 dark:bg-amber-200/60 flex items-center justify-center text-6xl transform group-hover:scale-110 group-hover:-rotate-6 transition-all duration-300 shadow-inner">
               🎮
             </div>
-            <div className="text-center">
-              <h2 className="text-4xl text-[#F4A261] mb-2" style={{ fontFamily: 'Baloo Bhaijaan 2, cursive' }}>
-                لعبة المطابقة
+
+            <div className="space-y-2">
+              <h2
+                className="text-3xl sm:text-4xl font-bold text-amber-600 dark:text-amber-700"
+                style={{ fontFamily: 'Baloo Bhaijaan 2, cursive' }}
+              >
+                {t('kids.gameTitle')}
               </h2>
-              <p className="text-gray-500 font-medium text-lg">
-                اختبر معلوماتك واربط كل صحابي بالخُلق الذي تميّز به!
+              <p className="text-slate-600 dark:text-slate-700 font-medium text-base sm:text-lg leading-relaxed">
+                {t('kids.gameDesc')}
               </p>
             </div>
-            <div className="mt-2 bg-[#F4A261] text-white px-8 py-3 rounded-full font-bold text-xl opacity-0 group-hover:opacity-100 transition-opacity" style={{ fontFamily: 'Baloo Bhaijaan 2' }}>
-              العب الآن ⬅️
+
+            <div
+              className="w-full mt-2 py-3.5 px-6 rounded-full font-bold text-lg sm:text-xl text-white bg-gradient-to-r from-amber-400 to-orange-400 shadow-md group-hover:shadow-lg transition-all flex items-center justify-center gap-2"
+              style={{ fontFamily: 'Baloo Bhaijaan 2, cursive' }}
+            >
+              <span>{t('kids.gameBtn')}</span>
+              <span className={`transform transition-transform ${isArabic ? 'group-hover:-translate-x-1' : 'group-hover:translate-x-1'}`}>
+                {isArabic ? '⬅️' : '➡️'}
+              </span>
             </div>
           </Link>
         </div>

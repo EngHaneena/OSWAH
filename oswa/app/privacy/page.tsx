@@ -1,56 +1,88 @@
+'use client';
+
+import React from 'react';
 import Link from 'next/link';
+import { useTranslation } from '@/lib/i18n';
 import { IslamicDivider } from '@/components/ornaments/IslamicPattern';
 
 export default function PrivacyPage() {
+  const { t, isArabic, dir } = useTranslation();
+
   return (
-    <main className="min-h-screen bg-[#F6F1E3] px-4 py-10" dir="rtl">
-      <div className="max-w-2xl mx-auto">
-        <Link href="/" className="text-[#B89B5E] text-sm hover:underline mb-6 inline-block">
-          ← العودة للرئيسية
+    <div className="min-h-screen py-10 px-4 sm:px-6 lg:px-8" dir={dir}>
+      <main className="max-w-3xl mx-auto">
+        <Link
+          href="/"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-[var(--color-gold)] hover:underline mb-6"
+        >
+          <span>{isArabic ? '←' : '→'}</span>
+          <span>{t('privacy.backHome')}</span>
         </Link>
-        <h1 className="text-3xl text-[#22301B] mb-2" style={{ fontFamily: 'Aref Ruqaa, serif' }}>
-          سياسة الخصوصية
-        </h1>
-        <IslamicDivider />
-        
-        <div className="space-y-6 text-[#22301B] leading-relaxed">
-          <section>
-            <h2 className="text-xl font-semibold mb-2 text-[#3F5233]">1. ما نجمعه</h2>
-            <p>
-              <strong>نصوص المشاكل:</strong> لا تُخزّن افتراضياً. يُحفظ نص فقط عند موافقتك الصريحة في خاصية «أبلغ عن خطأ».
-            </p>
-            <p className="mt-2">
-              <strong>البريد الإلكتروني:</strong> عند إنشاء حساب، يُحفظ بريدك لتسجيل الدخول فقط.
-            </p>
-          </section>
 
-          <section>
-            <h2 className="text-xl font-semibold mb-2 text-[#3F5233]">2. ما لا نفعله</h2>
-            <ul className="list-disc list-inside space-y-1">
-              <li>لا نَستنتج ميولك الديني أو الشخصي.</li>
-              <li>لا نبيع بياناتك لأي جهة ثالثة.</li>
-              <li>لا نستخدم بياناتك للدعاية التجارية.</li>
-            </ul>
-          </section>
+        <article className="bg-[var(--color-surface)] dark:bg-[#1b2614] rounded-3xl p-6 sm:p-10 shadow-sm border border-[var(--color-gold)]/25 backdrop-blur-md">
+          <header className="mb-6">
+            <h1
+              className="text-3xl sm:text-4xl text-[var(--color-ink)] dark:text-[var(--color-cream)] mb-2"
+              style={{ fontFamily: 'Aref Ruqaa, serif' }}
+            >
+              {t('privacy.title')}
+            </h1>
+            <p className="text-xs sm:text-sm text-[var(--color-ink-light)] dark:text-[#a0a896] leading-relaxed">
+              {t('privacy.intro')}
+            </p>
+          </header>
 
-          <section>
-            <h2 className="text-xl font-semibold mb-2 text-[#3F5233]">3. الذكاء الاصطناعي</h2>
-            <p>
-              تستخدم المنصة نماذج ذكاء اصطناعي لتقديم عبارات تعاطف وصياغة عبر. النصوص الشرعية تأتي من قاعدة بياناتنا مباشرة، ولا للنموذج.
-            </p>
-            <p className="mt-2 ai-badge inline-flex">
-              معدّ بمساعدة الذكاء الاصطناعي
-            </p>
-          </section>
+          <IslamicDivider />
 
-          <section>
-            <h2 className="text-xl font-semibold mb-2 text-[#3F5233]">4. حذف بياناتك</h2>
-            <p>
-              يمكنك حذف حسابك وجميع بياناتك بالتواصل معنا عبر صفحة البلاغ.
-            </p>
-          </section>
-        </div>
-      </div>
-    </main>
+          <div className="space-y-8 text-xs sm:text-sm text-[var(--color-ink)] dark:text-[#e4ddcc] leading-relaxed mt-6">
+            {/* Section 1 */}
+            <section className="space-y-2">
+              <h2 className="text-base sm:text-lg font-bold text-[var(--color-olive)] dark:text-[var(--color-gold-light)]">
+                {t('privacy.section1Title')}
+              </h2>
+              <p>{t('privacy.section1Text')}</p>
+              <ul className="list-disc list-inside space-y-1.5 text-[var(--color-ink-light)] dark:text-[#c4ceb8] pe-2">
+                <li>{t('privacy.section1Item1')}</li>
+                <li>{t('privacy.section1Item2')}</li>
+                <li>{t('privacy.section1Item3')}</li>
+              </ul>
+            </section>
+
+            {/* Section 2 */}
+            <section className="space-y-2">
+              <h2 className="text-base sm:text-lg font-bold text-[var(--color-olive)] dark:text-[var(--color-gold-light)]">
+                {t('privacy.section2Title')}
+              </h2>
+              <ul className="list-disc list-inside space-y-1.5 text-[var(--color-ink-light)] dark:text-[#c4ceb8] pe-2">
+                <li>{t('privacy.section2Item1')}</li>
+                <li>{t('privacy.section2Item2')}</li>
+                <li>{t('privacy.section2Item3')}</li>
+                <li>{t('privacy.section2Item4')}</li>
+              </ul>
+            </section>
+
+            {/* Section 3 */}
+            <section className="space-y-2">
+              <h2 className="text-base sm:text-lg font-bold text-[var(--color-olive)] dark:text-[var(--color-gold-light)]">
+                {t('privacy.section3Title')}
+              </h2>
+              <p className="text-[var(--color-ink-light)] dark:text-[#c4ceb8]">
+                {t('privacy.section3Text')}
+              </p>
+            </section>
+
+            {/* Section 4 */}
+            <section className="space-y-2">
+              <h2 className="text-base sm:text-lg font-bold text-[var(--color-olive)] dark:text-[var(--color-gold-light)]">
+                {t('privacy.section4Title')}
+              </h2>
+              <p className="text-[var(--color-ink-light)] dark:text-[#c4ceb8]">
+                {t('privacy.section4Text')}
+              </p>
+            </section>
+          </div>
+        </article>
+      </main>
+    </div>
   );
 }

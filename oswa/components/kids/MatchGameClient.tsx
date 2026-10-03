@@ -28,38 +28,38 @@ export default function MatchGameClient() {
   const shuffledTraits = [...MATCH_DATA].sort(() => Math.random() - 0.5);
 
   return (
-    <div className="bg-white/80 rounded-3xl p-5 shadow">
-      <p className="text-xs text-amber-600 bg-amber-50 rounded-xl px-3 py-2 mb-4">
+    <div className="bg-white/90 dark:bg-[#F5F2EB] rounded-[2rem] p-6 sm:p-8 shadow-lg border border-amber-500/20 text-[#1E293B]">
+      <p className="text-xs text-amber-700 bg-amber-100/70 rounded-xl px-3 py-2 mb-4">
         ⚠️ [بيانات تجريبية — تُستبدل بمحتوى موثق قبل الإطلاق]
       </p>
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
-          <p className="text-xs font-medium text-[#4A6038] mb-2">الصحابي</p>
+          <p className="text-xs font-bold text-[#4A6038] dark:text-slate-700 mb-2">الصحابي</p>
           {MATCH_DATA.map(d => (
             <div
               key={d.id}
               onDragOver={e => e.preventDefault()}
               onDrop={() => handleDrop(d.id)}
-              className={`rounded-xl p-3 text-xs border-2 min-h-[52px] flex items-center transition-all ${
+              className={`rounded-2xl p-3.5 text-sm border-2 min-h-[56px] flex items-center justify-between transition-all ${
                 correct.has(d.id) ? 'border-green-400 bg-green-50 text-green-800' :
-                wrongAnim === d.id ? 'border-red-300 bg-red-50 animate-pulse' :
-                'border-[#48CAE4] bg-sky-50'
+                wrongAnim === d.id ? 'border-red-300 bg-red-50 text-red-800 animate-pulse' :
+                'border-[#48CAE4] bg-sky-50 dark:bg-white text-[#1E293B]'
               }`}
             >
               <span style={{ fontFamily: 'Baloo Bhaijaan 2' }}>{d.companion}</span>
-              {correct.has(d.id) && <span className="mr-2 text-base">⭐</span>}
+              {correct.has(d.id) && <span className="ms-2 text-base">⭐</span>}
             </div>
           ))}
         </div>
         <div className="space-y-2">
-          <p className="text-xs font-medium text-[#4A6038] mb-2">الخُلق</p>
+          <p className="text-xs font-bold text-[#4A6038] dark:text-slate-700 mb-2">الخُلق</p>
           {shuffledTraits.map(d => (
             !correct.has(d.id) ? (
               <div
                 key={d.id}
                 draggable
                 onDragStart={() => setDragging(d.id)}
-                className="rounded-xl p-3 text-xs border-2 border-[#F4A261] bg-orange-50 cursor-grab active:cursor-grabbing hover:bg-orange-100 transition-all min-h-[52px] flex items-center"
+                className="rounded-2xl p-3.5 text-sm border-2 border-[#F4A261] bg-orange-50 dark:bg-white text-[#1E293B] cursor-grab active:cursor-grabbing hover:bg-orange-100 dark:hover:bg-amber-50 transition-all min-h-[56px] flex items-center shadow-sm"
               >
                 {d.trait}
               </div>
@@ -68,12 +68,12 @@ export default function MatchGameClient() {
         </div>
       </div>
       {stars > 0 && (
-        <p className="text-center text-[#F4A261] font-bold mt-4" style={{ fontFamily: 'Baloo Bhaijaan 2' }}>
+        <p className="text-center text-[#F4A261] font-bold mt-4 text-lg" style={{ fontFamily: 'Baloo Bhaijaan 2' }}>
           {'⭐'.repeat(stars)} أحسنت! {stars} نجمة!
         </p>
       )}
       {stars === MATCH_DATA.length && (
-        <p className="text-center text-green-600 font-bold mt-2" style={{ fontFamily: 'Baloo Bhaijaan 2' }}>
+        <p className="text-center text-green-600 font-bold mt-2 text-xl" style={{ fontFamily: 'Baloo Bhaijaan 2' }}>
           🎉 مبروك! أكملت اللعبة!
         </p>
       )}

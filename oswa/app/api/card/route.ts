@@ -139,7 +139,7 @@ export async function GET(req: NextRequest) {
       const pngData = resvg.render();
       const pngBuffer = pngData.asPng();
 
-      return new NextResponse(pngBuffer, {
+      return new Response(new Uint8Array(pngBuffer), {
         headers: {
           'Content-Type': 'image/png',
           'Content-Disposition': `attachment; filename="aswa-card.png"`,
