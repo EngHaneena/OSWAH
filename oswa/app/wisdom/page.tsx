@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { IslamicDivider, ProphetGlow } from '@/components/ornaments/IslamicPattern';
 import WisdomResult from '@/components/cards/WisdomResult';
+import WisdomTilesCarousel from '@/components/wisdom/WisdomTilesCarousel';
 import { useTranslation } from '@/lib/i18n';
 
 export default function WisdomPage() {
@@ -49,9 +50,12 @@ export default function WisdomPage() {
 
   return (
     <div className="min-h-screen flex flex-col" dir={dir}>
-      <main className="flex-1 px-4 py-8 max-w-3xl mx-auto w-full">
-        {/* رأس الصفحة */}
-        <header className="text-center mb-8 animate-fade-in-up">
+      <main className="flex-1 px-4 py-6 sm:py-8 max-w-4xl mx-auto w-full">
+        {/* 1. Hero Banner: Auto-Rotating Prophetic Tiles Carousel */}
+        <WisdomTilesCarousel />
+
+        {/* 2. رأس الصفحة */}
+        <header className="text-center mb-8 animate-fade-in-up mt-6">
           <div className="flex justify-center mb-4">
             <ProphetGlow className="w-20 h-20" />
           </div>

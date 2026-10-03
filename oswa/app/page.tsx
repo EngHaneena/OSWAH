@@ -1,14 +1,14 @@
 'use client';
 
-import React from 'react';
-import Link from 'next/link';
+import React, { useState } from 'react';
 import { ProphetGlow } from '@/components/ornaments/IslamicPattern';
-import FloatingTiles from '@/components/tiles/FloatingTiles';
+import DestinationModal from '@/components/modals/DestinationModal';
 import { useTranslation } from '@/lib/i18n';
 import { UI_TRANSLATIONS } from '@/components/tiles/tilesData';
 
 export default function LandingPage() {
   const { locale, isArabic, dir } = useTranslation();
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const tUI = UI_TRANSLATIONS[locale];
 
   return (
@@ -31,7 +31,7 @@ export default function LandingPage() {
         />
       </div>
 
-      {/* Central Hero Column — max-w-2xl keeps sides completely safe for floating tiles */}
+      {/* Central Hero Column */}
       <div className="z-20 flex flex-col items-center animate-fade-in-up max-w-2xl w-full text-center my-auto">
         {/* Glow Element */}
         <div className="relative mb-6 transform hover:scale-110 transition-transform duration-700">
@@ -68,10 +68,11 @@ export default function LandingPage() {
           )}
         </div>
 
-        {/* Enter Button */}
-        <Link
-          href="/wisdom"
-          className="mt-2 group relative inline-flex items-center justify-center px-10 sm:px-12 py-4 sm:py-5 bg-[var(--color-olive)] text-[var(--color-cream)] rounded-full text-xl sm:text-2xl shadow-xl hover:shadow-2xl hover:bg-[var(--color-ink)] hover:scale-105 active:scale-95 transition-all duration-300 animate-fade-in-up focus:outline-none focus:ring-4 focus:ring-[var(--color-gold)] gap-3"
+        {/* Enter Button — Opens Destination Choice Modal */}
+        <button
+          type="button"
+          onClick={() => setIsModalOpen(true)}
+          className="mt-2 group relative inline-flex items-center justify-center px-10 sm:px-12 py-4 sm:py-5 bg-[var(--color-olive)] text-[var(--color-cream)] rounded-full text-xl sm:text-2xl shadow-xl hover:shadow-2xl hover:bg-[var(--color-ink)] hover:scale-105 active:scale-95 transition-all duration-300 animate-fade-in-up focus:outline-none focus:ring-4 focus:ring-[var(--color-gold)] gap-3 cursor-pointer"
           style={{ animationDelay: '0.4s' }}
           dir={dir}
         >
@@ -95,11 +96,11 @@ export default function LandingPage() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7 7-7" />
             </svg>
           </div>
-        </Link>
+        </button>
       </div>
 
-      {/* Floating Tiles (Desktop absolute sides + mobile responsive strip) */}
-      <FloatingTiles />
+      {/* Destination Choice Modal */}
+      <DestinationModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </main>
   );
 }
