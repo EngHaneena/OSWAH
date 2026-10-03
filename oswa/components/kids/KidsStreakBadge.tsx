@@ -62,80 +62,58 @@ export default function KidsStreakBadge() {
 
   if (!mounted) {
     return (
-      <div className="h-16 w-full max-w-md mx-auto mb-6 bg-white/40 dark:bg-white/10 rounded-3xl animate-pulse" />
+      <div className="h-9 w-36 bg-white/40 dark:bg-white/10 rounded-full animate-pulse" />
     );
   }
 
   return (
-    <section
+    <div
       aria-label="عداد الستريك اليومي"
-      className="relative w-full max-w-xl mx-auto mb-8 bg-gradient-to-r from-amber-100 via-orange-50 to-amber-100 dark:from-amber-950/60 dark:via-orange-950/40 dark:to-amber-950/60 p-4 sm:p-5 rounded-3xl border-2 border-amber-400/60 dark:border-amber-500/40 shadow-lg text-center backdrop-blur-md transition-all duration-300 transform hover:scale-[1.01]"
+      className="relative inline-flex items-center gap-2 sm:gap-3 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full bg-white/95 dark:bg-[#F5F2EB] text-[#1E293B] border-2 border-amber-400/60 dark:border-amber-500/40 shadow-md hover:shadow-lg transition-all duration-300 backdrop-blur-md select-none group"
+      title={hasCheckedInToday ? t('kids.streakDoneToday') : t('kids.streakTooltip')}
     >
-      {/* Decorative fire glow effect */}
-      <div className="absolute -top-3 -start-3 text-2xl animate-bounce" style={{ animationDuration: '2s' }}>
-        🔥
-      </div>
-      <div className="absolute -top-3 -end-3 text-2xl animate-bounce" style={{ animationDuration: '2.4s', animationDelay: '0.4s' }}>
-        ✨
-      </div>
-
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-        {/* Streak Flame & Count Badge */}
-        <div className="flex items-center gap-3">
-          <div className="relative flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-tr from-amber-500 to-orange-500 text-white shadow-md text-3xl animate-pulse">
-            🔥
-            {showCelebration && (
-              <span className="absolute -top-2 -end-2 text-xl animate-ping">
-                ⭐
-              </span>
-            )}
-          </div>
-
-          <div className="text-start">
-            <h2
-              className="text-xl sm:text-2xl font-bold text-amber-900 dark:text-amber-200"
-              style={{ fontFamily: 'Baloo Bhaijaan 2, cursive' }}
-            >
-              {t('kids.streakTitle', { days: formattedStreak })}
-            </h2>
-            <p className="text-xs sm:text-sm text-amber-700 dark:text-amber-300 font-medium">
-              {hasCheckedInToday
-                ? t('kids.streakDoneToday')
-                : t('kids.streakTooltip')}
-            </p>
-          </div>
-        </div>
-
-        {/* Daily Action Check-in Button */}
-        <button
-          onClick={handleDailyCheckIn}
-          disabled={hasCheckedInToday}
-          className={`px-4 py-2.5 rounded-2xl font-bold text-sm sm:text-base transition-all duration-300 shadow-md flex items-center gap-1.5 whitespace-nowrap active:scale-95 ${
-            hasCheckedInToday
-              ? 'bg-emerald-500 text-white cursor-default shadow-emerald-500/20'
-              : 'bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white hover:shadow-lg hover:scale-105'
-          }`}
+      {/* Flame Icon & Count */}
+      <div className="flex items-center gap-1.5 font-bold">
+        <span className="text-xl sm:text-2xl animate-pulse">🔥</span>
+        <span
+          className="text-sm sm:text-base font-bold text-amber-900 dark:text-amber-900 tracking-wide"
           style={{ fontFamily: 'Baloo Bhaijaan 2, cursive' }}
         >
-          {hasCheckedInToday ? (
-            <>
-              <span>✓</span>
-              <span>{t('kids.streakDoneToday')}</span>
-            </>
-          ) : (
-            <>
-              <span>✨</span>
-              <span>{t('kids.streakCheckin')}</span>
-            </>
-          )}
-        </button>
+          {t('kids.streakTitle', { days: formattedStreak })}
+        </span>
       </div>
 
+      {/* Compact Check-in Action / Status */}
+      <button
+        onClick={handleDailyCheckIn}
+        disabled={hasCheckedInToday}
+        className={`px-2.5 py-1 rounded-full text-xs font-bold transition-all duration-200 flex items-center gap-1 whitespace-nowrap active:scale-95 ${
+          hasCheckedInToday
+            ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-200/90 dark:text-emerald-950 cursor-default'
+            : 'bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white shadow-xs hover:scale-105'
+        }`}
+        style={{ fontFamily: 'Baloo Bhaijaan 2, cursive' }}
+        aria-label={hasCheckedInToday ? t('kids.streakDoneToday') : t('kids.streakCheckin')}
+      >
+        {hasCheckedInToday ? (
+          <>
+            <span>✓</span>
+            <span className="hidden sm:inline">{t('kids.streakDoneToday')}</span>
+          </>
+        ) : (
+          <>
+            <span>✨</span>
+            <span>{t('kids.streakCheckin')}</span>
+          </>
+        )}
+      </button>
+
+      {/* Celebratory Floating Pop */}
       {showCelebration && (
-        <div className="mt-2 text-xs sm:text-sm font-bold text-emerald-600 dark:text-emerald-400 animate-fade-in-up">
-          🎉 {isArabic ? 'رائع جداً! تم تسجيل حضورك اليومي بنجاح!' : 'Awesome! Daily streak saved successfully!'}
-        </div>
+        <span className="absolute -bottom-7 start-1/2 -translate-x-1/2 text-xs font-bold text-emerald-700 dark:text-emerald-800 bg-white/90 dark:bg-[#EFECE4] px-2.5 py-0.5 rounded-full shadow border border-emerald-400 whitespace-nowrap animate-bounce">
+          🎉 +1 {isArabic ? 'ستريك متألق!' : 'Streak updated!'}
+        </span>
       )}
-    </section>
+    </div>
   );
 }

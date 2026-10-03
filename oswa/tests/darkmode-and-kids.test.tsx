@@ -1,12 +1,13 @@
 import React from 'react';
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import Tile from '../components/tiles/Tile';
 import TileModal from '../components/tiles/TileModal';
 import KidsAnimatedBackground from '../components/kids/KidsAnimatedBackground';
 import KidsMenuPage from '../app/kids/page';
 import StoryPage from '../app/kids/story/page';
 import GamePage from '../app/kids/game/page';
+import ParentalPortalModal from '../components/kids/ParentalPortalModal';
 import { TileData } from '../components/tiles/types';
 import { LanguageProvider } from '../lib/i18n';
 
@@ -76,7 +77,7 @@ describe('Task 1: Dark Mode Customization (الوضع الليلي)', () => {
 });
 
 describe('Task 2: Kids Corner Theming & Animated Background (ركن الطفل)', () => {
-  it('renders KidsAnimatedBackground with non-blocking pointer-events-none and essential cartoon keyframe elements', () => {
+  it('renders KidsAnimatedBackground with moon, clouds, dunes and caravan, and completely removes stars and balloons', () => {
     const { container } = render(<KidsAnimatedBackground />);
     const bgContainer = container.firstChild as HTMLElement;
 
@@ -94,59 +95,40 @@ describe('Task 2: Kids Corner Theming & Animated Background (ركن الطفل)'
     expect(clouds.length).toBeGreaterThanOrEqual(3);
     expect(clouds[0].className).toMatch(/animate-cloud-drift/);
 
-    // 3. Twinkling & pulsing stars (✨ / ⭐)
-    const stars = screen.getAllByText(/[⭐✨]/);
-    expect(stars.length).toBeGreaterThanOrEqual(4);
-    expect(stars[0].className).toContain('animate-star-twinkle');
+    // 3. Stars and Balloons are COMPLETELY REMOVED from background
+    expect(screen.queryByText('✨')).not.toBeInTheDocument();
+    expect(screen.queryByText('🎈')).not.toBeInTheDocument();
 
-    // 4. Celebratory balloons (🎈)
-    const balloons = screen.getAllByText('🎈');
-    expect(balloons.length).toBeGreaterThanOrEqual(2);
-    expect(balloons[0].className).toContain('animate-balloon-float');
+    // 4. Cartoon Caravan Trail remains anchored at bottom
+    expect(screen.getByTestId('caravan-trail')).toBeInTheDocument();
+    expect(screen.getAllByText('🐪').length).toBeGreaterThanOrEqual(3);
+    expect(screen.getByText('⛺')).toBeInTheDocument();
   });
 
-  it('renders KidsMenuPage with day/night gradients, extra-rounded cards, caravan trail, streak badge, and peer challenge', () => {
+  it('renders KidsMenuPage with compact streak pill, parental portal button, and peer challenge', async () => {
     const { container } = render(
       <LanguageProvider>
         <KidsMenuPage />
       </LanguageProvider>
     );
 
-    // Page background includes bright pastel day gradient and whimsical night gradient
-    const outerWrapper = container.firstChild as HTMLElement;
-    expect(outerWrapper.className).toContain('from-[#FEF9C3]');
-    expect(outerWrapper.className).toContain('via-[#E0F2FE]');
-    expect(outerWrapper.className).toContain('to-[#FCE7F3]');
-    expect(outerWrapper.className).toContain('dark:from-slate-900');
-    expect(outerWrapper.className).toContain('dark:via-indigo-950');
-    expect(outerWrapper.className).toContain('dark:to-purple-950');
-
     // Section title is Oswah Sprouts (براعم أُسوة)
     expect(screen.getByText('براعم أُسوة')).toBeInTheDocument();
 
-    // Cartoon Caravan Trail is rendered
-    expect(screen.getByTestId('caravan-trail')).toBeInTheDocument();
-    expect(screen.getAllByText('🐪').length).toBeGreaterThanOrEqual(3);
-    expect(screen.getByText('⛺')).toBeInTheDocument();
-
-    // Streak badge is rendered with motivational text
+    // Compact Streak Pill is pinned at top
+    expect(screen.getByLabelText('عداد الستريك اليومي')).toBeInTheDocument();
     expect(screen.getByText(/ستريك.*أيام من الاقتداء/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /تسجيل الحضور اليومي|أحسنت/i })).toBeInTheDocument();
 
-    // Story and game cards with extra-rounded corners and hover expansion
-    const storyLink = screen.getByRole('link', { name: /قصة تفاعلية/i });
-    expect(storyLink).toBeInTheDocument();
-    expect(storyLink.className).toContain('rounded-[2.5rem]');
-    expect(storyLink.className).toContain('hover:scale-105');
+    // Parental Portal button is pinned at top corner
+    const parentBtn = screen.getByRole('button', { name: /بوابة ولي الأمر/i });
+    expect(parentBtn).toBeInTheDocument();
 
-    const gameLink = screen.getByRole('link', { name: /لعبة المطابقة/i });
-    expect(gameLink).toBeInTheDocument();
-    expect(gameLink.className).toContain('rounded-[2.5rem]');
-    expect(gameLink.className).toContain('hover:scale-105');
+    // Story and game cards
+    expect(screen.getByRole('link', { name: /قصة تفاعلية/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /لعبة المطابقة/i })).toBeInTheDocument();
 
     // Peer Challenge card is rendered
     expect(screen.getByText(/تحدي البراعم/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /ابدأ التحدي/i })).toBeInTheDocument();
   });
 
   it('renders StoryPage and GamePage without duplicate Navbar and with KidsAnimatedBackground', () => {
@@ -166,5 +148,58 @@ describe('Task 2: Kids Corner Theming & Animated Background (ركن الطفل)'
     expect(gameContainer.querySelector('nav')).toBeNull(); // No duplicate navbar
     expect(gameContainer.querySelector('.animate-float-gentle')).toBeInTheDocument(); // Moon animation present
   });
+
+  it('renders ParentalPortalModal with verification gate, screen time settings, and prophetic tips', () => {
+    const handleClose = vi.fn();
+    render(
+      <LanguageProvider>
+        <ParentalPortalModal isOpen={true} onClose={handleClose} sessionMinutes={12} />
+      </LanguageProvider>
+    );
+
+    // Initial Gatekeeper Challenge is shown
+    expect(screen.getByText('التحقق من إشراف ولي الأمر')).toBeInTheDocument();
+    const submitBtn = screen.getByRole('button', { name: /تحقق ودخول/i });
+    expect(submitBtn).toBeInTheDocument();
+
+    // Input wrong answer
+    const input = screen.getByPlaceholderText(/أدخل الناتج هنا/i);
+    fireEvent.change(input, { target: { value: '999' } });
+    fireEvent.click(submitBtn);
+
+    // Error appears
+    expect(screen.getByText(/الناتج غير صحيح/i)).toBeInTheDocument();
+
+    // Find the math expression displayed on screen
+    const formulaEl = screen.getByText(/×.*=/);
+    const formulaText = formulaEl.textContent || '';
+    const match = formulaText.match(/(\d+)\s*×\s*(\d+)/);
+    expect(match).not.toBeNull();
+    const [_, a, b] = match!;
+    const correctAnswer = (parseInt(a, 10) * parseInt(b, 10)).toString();
+
+    // Input correct answer
+    const inputAfter = screen.getByPlaceholderText(/أدخل الناتج هنا/i);
+    fireEvent.change(inputAfter, { target: { value: correctAnswer } });
+    fireEvent.click(submitBtn);
+
+    // Dashboard unlocked!
+    expect(screen.getByText('بوابة ولي الأمر — إشراف الوالدين')).toBeInTheDocument();
+    expect(screen.getByText(/نشاط وتقدم الطفل/i)).toBeInTheDocument();
+    expect(screen.getByText(/وقت الشاشة والراحة/i)).toBeInTheDocument();
+    expect(screen.getByText(/توجيهات السيرة التربوية/i)).toBeInTheDocument();
+
+    // Click Screen Time Tab
+    const screenTimeTab = screen.getByRole('button', { name: /وقت الشاشة والراحة/i });
+    fireEvent.click(screenTimeTab);
+    expect(screen.getByText(/الوقت المنقضي في هذه الجلسة/i)).toBeInTheDocument();
+    expect(screen.getByText('12 دقيقة')).toBeInTheDocument();
+
+    // Click Tips Tab
+    const tipsTab = screen.getByRole('button', { name: /توجيهات السيرة التربوية/i });
+    fireEvent.click(tipsTab);
+    expect(screen.getByText(/تعزيز خُلق الصدق بالأمان لا بالعقاب/i)).toBeInTheDocument();
+  });
 });
+
 

@@ -45,63 +45,6 @@ export default function KidsAnimatedBackground() {
         ☁️
       </div>
 
-      {/* 3. Twinkling & Pulsing Stars (✨ / ⭐) */}
-      {/* Top right cluster */}
-      <div
-        className="absolute top-12 end-16 text-3xl sm:text-4xl text-amber-400 dark:text-yellow-300 animate-star-twinkle filter drop-shadow-md"
-        style={{ animationDelay: '0.2s', animationDuration: '2.8s' }}
-      >
-        ⭐
-      </div>
-      <div
-        className="absolute top-20 end-32 text-2xl text-amber-300 dark:text-yellow-200 animate-star-twinkle"
-        style={{ animationDelay: '1.4s', animationDuration: '2.2s' }}
-      >
-        ✨
-      </div>
-
-      {/* Center sky sparkles */}
-      <div
-        className="absolute top-36 start-1/3 text-2xl sm:text-3xl text-yellow-400 animate-star-twinkle"
-        style={{ animationDelay: '0.8s', animationDuration: '3.2s' }}
-      >
-        ⭐
-      </div>
-      <div
-        className="absolute top-64 end-1/4 text-2xl text-amber-300 animate-star-twinkle"
-        style={{ animationDelay: '1.9s', animationDuration: '2.5s' }}
-      >
-        ✨
-      </div>
-
-      {/* Lower playful stars */}
-      <div
-        className="absolute bottom-28 start-16 text-3xl text-yellow-400 animate-star-twinkle"
-        style={{ animationDelay: '1.1s', animationDuration: '2.7s' }}
-      >
-        ⭐
-      </div>
-      <div
-        className="absolute bottom-40 end-20 text-3xl text-amber-300 animate-star-twinkle"
-        style={{ animationDelay: '0.5s', animationDuration: '3s' }}
-      >
-        ✨
-      </div>
-
-      {/* 4. Celebratory Floating Balloons (🎈) */}
-      <div
-        className="absolute bottom-28 start-10 sm:start-24 text-4xl sm:text-5xl animate-balloon-float filter drop-shadow-lg"
-        style={{ animationDelay: '0s', animationDuration: '5.2s' }}
-      >
-        🎈
-      </div>
-      <div
-        className="absolute bottom-36 end-12 sm:end-28 text-4xl sm:text-5xl animate-balloon-float filter drop-shadow-lg"
-        style={{ animationDelay: '2.4s', animationDuration: '4.8s' }}
-      >
-        🎈
-      </div>
-
       {/* 5. Desert Sand Dunes & Cartoon Caravan Trail (مسار القافلة الكرتوني) */}
       <div className="absolute bottom-0 inset-x-0 h-40 sm:h-48 overflow-hidden pointer-events-none select-none z-0">
         {/* Soft Background Dunes (Back Layer) */}

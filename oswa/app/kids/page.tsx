@@ -1,29 +1,86 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useTranslation } from '@/lib/i18n';
 import KidsAnimatedBackground from '@/components/kids/KidsAnimatedBackground';
 import KidsStreakBadge from '@/components/kids/KidsStreakBadge';
 import SproutsPeerChallenge from '@/components/kids/SproutsPeerChallenge';
+import ParentalPortalModal from '@/components/kids/ParentalPortalModal';
+import ScreenTimeBreakModal from '@/components/kids/ScreenTimeBreakModal';
 
 export default function KidsMenuPage() {
   const { t, dir, isArabic } = useTranslation();
+  const [sessionSeconds, setSessionSeconds] = useState(0);
+  const [isParentModalOpen, setIsParentModalOpen] = useState(false);
+  const [isBreakModalOpen, setIsBreakModalOpen] = useState(false);
+  const [hasShownBreakAlert, setHasShownBreakAlert] = useState(false);
+
+  // Session Screen Time Tracking
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setSessionSeconds((prev) => {
+        const next = prev + 1;
+        try {
+          const savedLimit = localStorage.getItem('oswa_screen_time_limit');
+          const limitMins = savedLimit !== null ? parseInt(savedLimit, 10) : 20;
+          if (limitMins > 0 && next >= limitMins * 60 && !hasShownBreakAlert) {
+            setIsBreakModalOpen(true);
+            setHasShownBreakAlert(true);
+          }
+        } catch {
+          // ignore
+        }
+        return next;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [hasShownBreakAlert]);
+
+  const handleSnooze = () => {
+    setIsBreakModalOpen(false);
+    setSessionSeconds((prev) => Math.max(0, prev - 300));
+  };
+
+  const handleDismissBreak = () => {
+    setIsBreakModalOpen(false);
+  };
+
+  const elapsedMinutes = Math.floor(sessionSeconds / 60);
 
   return (
     <div
-      className="min-h-[calc(100vh-4rem)] bg-gradient-to-br from-[#FEF9C3] via-[#E0F2FE] to-[#FCE7F3] dark:bg-gradient-to-b dark:from-slate-900 dark:via-indigo-950 dark:to-purple-950 relative overflow-hidden flex flex-col items-center justify-start px-4 pt-10 pb-44 transition-colors duration-500"
+      className="min-h-[calc(100vh-4rem)] bg-gradient-to-br from-[#FEF9C3] via-[#E0F2FE] to-[#FCE7F3] dark:bg-gradient-to-b dark:from-slate-900 dark:via-indigo-950 dark:to-purple-950 relative overflow-hidden flex flex-col items-center justify-start px-4 pt-6 pb-44 transition-colors duration-500"
       dir={dir}
     >
-      {/* Cartoon animated elements: drifting clouds, crescent moon, stars, balloons, desert dunes & caravan trail */}
+      {/* Cartoon animated elements: drifting clouds, crescent moon, and desert dunes with caravan trail */}
       <KidsAnimatedBackground />
 
       <main className="relative z-10 max-w-4xl mx-auto w-full flex flex-col items-center">
+        {/* Pinned Top Bar: Compact Streak Badge & Discrete Parental Portal Button */}
+        <div className="w-full flex items-center justify-between mb-8 z-20">
+          {/* Top-Start: Pinned Daily Streak Pill Badge */}
+          <KidsStreakBadge />
+
+          {/* Top-End: Discrete Parental Portal Button */}
+          <button
+            onClick={() => setIsParentModalOpen(true)}
+            aria-label={t('parentPortal.btnTitle')}
+            className="inline-flex items-center gap-1.5 sm:gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-white/95 dark:bg-[#F5F2EB] text-[#1E293B] border border-[var(--color-gold)]/40 dark:border-amber-500/30 hover:border-amber-500 shadow-md hover:shadow-lg transition-all duration-300 backdrop-blur-md text-xs sm:text-sm font-bold active:scale-95 group"
+          >
+            <span className="text-base sm:text-lg group-hover:scale-110 transition-transform">🛡️</span>
+            <span style={{ fontFamily: isArabic ? 'Aref Ruqaa, serif' : 'inherit' }}>
+              {t('parentPortal.btnTitle')}
+            </span>
+          </button>
+        </div>
+
         {/* Playful Header */}
-        <header className="text-center mb-6 animate-fade-in-up">
+        <header className="text-center mb-8 animate-fade-in-up">
           <div className="inline-flex items-center justify-center gap-2 mb-3 text-4xl sm:text-5xl animate-bounce">
             <span>⭐</span>
-            <span className="text-amber-500 dark:text-yellow-300">🎈</span>
+            <span className="text-emerald-500 dark:text-emerald-400">🌿</span>
             <span>⭐</span>
           </div>
 
@@ -41,11 +98,6 @@ export default function KidsMenuPage() {
             {t('kids.subtitle')}
           </p>
         </header>
-
-        {/* Daily Streak Badge */}
-        <div className="w-full max-w-3xl">
-          <KidsStreakBadge />
-        </div>
 
         {/* Kids Action Cards (Story & Game) */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-3xl">
@@ -118,6 +170,20 @@ export default function KidsMenuPage() {
 
         {/* Peer Challenge Feature (تحدي البراعم ⚔️) */}
         <SproutsPeerChallenge />
+
+        {/* Parental Portal Modal */}
+        <ParentalPortalModal
+          isOpen={isParentModalOpen}
+          onClose={() => setIsParentModalOpen(false)}
+          sessionMinutes={elapsedMinutes}
+        />
+
+        {/* Gentle Screen Time Break Alert */}
+        <ScreenTimeBreakModal
+          isOpen={isBreakModalOpen}
+          onDismiss={handleDismissBreak}
+          onSnooze={handleSnooze}
+        />
       </main>
     </div>
   );
