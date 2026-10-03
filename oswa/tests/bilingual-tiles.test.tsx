@@ -163,4 +163,45 @@ describe('Bilingual Tiles & Navigation Flow Suite', () => {
 
     vi.useRealTimers();
   });
+
+  it('Requirement 6: LandingPage renders PropheticLineageBackground watermark and interactive LineageFloatingBadge', () => {
+    render(
+      <LanguageProvider defaultLocale="ar">
+        <LandingPage />
+      </LanguageProvider>
+    );
+
+    // Prophetic lineage watermark background is rendered with pointer-events-none
+    const lineageBg = screen.getByTestId('lineage-tree-background');
+    expect(lineageBg).toBeInTheDocument();
+    expect(lineageBg).toHaveClass('pointer-events-none');
+
+    // Key noble ancestors are in the background watermark SVG
+    expect(screen.getAllByText('محمد ﷺ').length).toBeGreaterThanOrEqual(1);
+    expect(screen.getByText('عدنان')).toBeInTheDocument();
+
+    // Floating badge in bottom corner
+    const badge = screen.getByRole('button', { name: /شجرة النسب الشريف/i });
+    expect(badge).toBeInTheDocument();
+
+    // Hover on badge triggers highlight
+    fireEvent.mouseEnter(badge);
+    expect(lineageBg.className).toContain('opacity-80');
+
+    // Click on badge opens the detailed Lineage Modal
+    fireEvent.click(badge);
+    const modal = screen.getByRole('dialog', { name: /نسب النبي محمد ﷺ الشريف/i });
+    expect(modal).toBeInTheDocument();
+
+    // Contains Hadith of selection from Sahih Muslim
+    expect(screen.getAllByText(/إن الله اصطفى كنانة من ولد إسماعيل/i).length).toBeGreaterThanOrEqual(1);
+
+    // Contains 22 generations count and pivotal ancestors (فهر، قصي، هاشم، عبد المطلب)
+    expect(screen.getByText('٢٢ جيلاً مباركاً')).toBeInTheDocument();
+    expect(screen.getAllByText('فهر (قريش)').length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText('قصي').length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText('هاشم').length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText('عبد المطلب').length).toBeGreaterThanOrEqual(1);
+  });
 });
+

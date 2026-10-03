@@ -240,5 +240,27 @@
     "tip4Title": "Nurturing Altruism and Giving",
     "tip4Text": "Encourage your child to share treats or toys with siblings and peers, referencing the Prophetic spirit of selflessness, and reward their generosity with sincere verbal appreciation.",
     "close": "Close Portal"
+  },
+  "lineage": {
+    "badgeTitle": "Prophetic Lineage Tree",
+    "badgeTooltip": "Click to explore the noble ancestry of Prophet Muhammad ﷺ from Adnan",
+    "modalTitle": "Noble Lineage of Prophet Muhammad ﷺ",
+    "modalSubtitle": "\"Indeed Allah chose Kinana from the children of Isma'il, and chose Quraysh from Kinana, and chose Banu Hashim from Quraysh, and chose me from Banu Hashim.\"",
+    "sourceHadith": "Sahih Muslim — Narrated by Wathila ibn al-Asqa' (may Allah be pleased with him)",
+    "highlightToggle": "Highlight Tree in Background",
+    "softModeToggle": "Soft Mode",
+    "fromAdnan": "The Pure Ancestral Sequence from Adnan to Prophet Muhammad ﷺ",
+    "close": "Close Window",
+    "generation": "Generation",
+    "generationsCount": "22 Blessed Generations",
+    "nobleSequence": "Noble Prophetic Ancestry",
+    "prophetName": "Muhammad ﷺ",
+    "prophetTitle": "Master of Humanity and Seal of the Prophets",
+    "pivotalAncestors": "Pivotal Ancestors in the Noble Lineage:",
+    "pivotalFihr": "Fihr: Titled 'Quraysh', to whom all Qurayshite noble clans trace back.",
+    "pivotalQusayy": "Qusayy ibn Kilab: Chieftain of Makkah, founder of Dar an-Nadwa, and provider of hospitality to pilgrims.",
+    "pivotalHashim": "Hashim ('Amr al-'Ula): Initiator of the Summer & Winter Trade Journeys praised in the Holy Quran.",
+    "pivotalMuttalib": "Abd al-Muttalib (Shaybat al-Hamd): Rediscoverer of the Zamzam well, guardian of the Prophet ﷺ.",
+    "pivotalAbdullah": "Abdullah: The beloved father of the Prophet ﷺ, chosen by Allah for the blessed mission."
   }
 }

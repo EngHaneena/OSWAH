@@ -3,35 +3,31 @@
 import React, { useState } from 'react';
 import { ProphetGlow } from '@/components/ornaments/IslamicPattern';
 import DestinationModal from '@/components/modals/DestinationModal';
+import PropheticLineageBackground from '@/components/lineage/PropheticLineageBackground';
+import PropheticLineageModal from '@/components/lineage/PropheticLineageModal';
+import LineageFloatingBadge from '@/components/lineage/LineageFloatingBadge';
 import { useTranslation } from '@/lib/i18n';
 import { UI_TRANSLATIONS } from '@/components/tiles/tilesData';
 
 export default function LandingPage() {
   const { locale, isArabic, dir } = useTranslation();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLineageModalOpen, setIsLineageModalOpen] = useState(false);
+  const [isLineageHighlighted, setIsLineageHighlighted] = useState(false);
+  const [isLineageHovered, setIsLineageHovered] = useState(false);
+
   const tUI = UI_TRANSLATIONS[locale];
+  const isEffectiveHighlight = isLineageHighlighted || isLineageHovered;
 
   return (
     <main
       className="min-h-[calc(100vh-4rem)] flex flex-col items-center justify-center px-4 py-8 relative overflow-hidden"
       dir={dir}
     >
-      {/* Decorative dynamic ambient rings */}
-      <div
-        className="absolute inset-0 opacity-[0.03] dark:opacity-[0.02] pointer-events-none flex items-center justify-center"
-        aria-hidden="true"
-      >
-        <div
-          className="w-[800px] h-[800px] border-[1px] border-[var(--color-olive)] rounded-full animate-ping"
-          style={{ animationDuration: '10s' }}
-        />
-        <div
-          className="absolute w-[600px] h-[600px] border-[1px] border-[var(--color-gold)] rounded-full animate-ping"
-          style={{ animationDuration: '12s' }}
-        />
-      </div>
+      {/* 1. Subtle & Dignified Prophetic Lineage Tree Background Watermark (شجرة نسب النبي ﷺ) */}
+      <PropheticLineageBackground isHighlighted={isEffectiveHighlight} />
 
-      {/* Central Hero Column */}
+      {/* 2. Central Hero Column (z-20 sits clearly above the background watermark) */}
       <div className="z-20 flex flex-col items-center animate-fade-in-up max-w-2xl w-full text-center my-auto">
         {/* Glow Element */}
         <div className="relative mb-6 transform hover:scale-110 transition-transform duration-700">
@@ -99,8 +95,24 @@ export default function LandingPage() {
         </button>
       </div>
 
-      {/* Destination Choice Modal */}
+      {/* 3. Destination Choice Modal (Wisdom vs Oswah Sprouts) */}
       <DestinationModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+
+      {/* 4. Subtle Floating Badge in bottom corner: 📜 شجرة النسب الشريف */}
+      <LineageFloatingBadge
+        onClick={() => setIsLineageModalOpen(true)}
+        onHoverStart={() => setIsLineageHovered(true)}
+        onHoverEnd={() => setIsLineageHovered(false)}
+        isHighlighted={isEffectiveHighlight}
+      />
+
+      {/* 5. Detailed Interactive Prophetic Lineage Modal */}
+      <PropheticLineageModal
+        isOpen={isLineageModalOpen}
+        onClose={() => setIsLineageModalOpen(false)}
+        isBackgroundHighlighted={isLineageHighlighted}
+        onToggleHighlight={() => setIsLineageHighlighted(!isLineageHighlighted)}
+      />
     </main>
   );
 }
