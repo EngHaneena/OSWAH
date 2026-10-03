@@ -117,7 +117,7 @@ export default function DestinationModal({ isOpen, onClose }: DestinationModalPr
             </div>
           </Link>
 
-          {/* 2. Kids Corner Destination */}
+          {/* 2. Oswah Sprouts Destination */}
           <Link
             href="/kids"
             onClick={onClose}
@@ -127,7 +127,7 @@ export default function DestinationModal({ isOpen, onClose }: DestinationModalPr
             <div className="flex items-center justify-between gap-2 mb-4">
               <span className="text-3xl group-hover:scale-110 transition-transform">⭐</span>
               <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-700 dark:bg-amber-100 dark:text-amber-900 border border-amber-500/20">
-                {isArabic ? 'للأطفال والناشئة' : 'For Kids & Youth'}
+                {isArabic ? 'للأطفال والناشئة' : 'For Sprouts & Youth'}
               </span>
             </div>
 
@@ -137,7 +137,7 @@ export default function DestinationModal({ isOpen, onClose }: DestinationModalPr
                 className="text-xl font-bold text-[#22301B] dark:text-[#1E293B] mb-2 group-hover:text-amber-600 dark:group-hover:text-amber-800 transition-colors"
                 style={{ fontFamily: 'Baloo Bhaijaan 2, cursive' }}
               >
-                {isArabic ? 'ركن الأطفال' : 'Kids Corner'}
+                {isArabic ? 'براعم أُسوة' : 'Oswah Sprouts'}
               </h3>
               <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-700 leading-relaxed font-medium">
                 {isArabic
@@ -149,7 +149,7 @@ export default function DestinationModal({ isOpen, onClose }: DestinationModalPr
             {/* Action CTA */}
             <div className="flex items-center justify-between pt-3 border-t border-[var(--color-gold)]/20 dark:border-amber-500/20 text-xs font-bold text-amber-700 dark:text-amber-800">
               <span style={{ fontFamily: 'Baloo Bhaijaan 2, cursive' }}>
-                {isArabic ? 'دخول ركن الأطفال' : 'Enter Kids Corner'}
+                {isArabic ? 'دخول براعم أُسوة' : 'Enter Oswah Sprouts'}
               </span>
               <span className={`transform transition-transform ${isArabic ? 'group-hover:-translate-x-1.5' : 'group-hover:translate-x-1.5'}`}>
                 {isArabic ? '⬅️' : '➡️'}

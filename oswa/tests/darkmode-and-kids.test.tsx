@@ -105,7 +105,7 @@ describe('Task 2: Kids Corner Theming & Animated Background (ركن الطفل)'
     expect(balloons[0].className).toContain('animate-balloon-float');
   });
 
-  it('renders KidsMenuPage with day/night gradients, extra-rounded cards, and hover expansion', () => {
+  it('renders KidsMenuPage with day/night gradients, extra-rounded cards, caravan trail, streak badge, and peer challenge', () => {
     const { container } = render(
       <LanguageProvider>
         <KidsMenuPage />
@@ -121,8 +121,17 @@ describe('Task 2: Kids Corner Theming & Animated Background (ركن الطفل)'
     expect(outerWrapper.className).toContain('dark:via-indigo-950');
     expect(outerWrapper.className).toContain('dark:to-purple-950');
 
-    // Kids typography font-kids / Baloo Bhaijaan 2
-    expect(screen.getByText('ركن الأطفال')).toBeInTheDocument();
+    // Section title is Oswah Sprouts (براعم أُسوة)
+    expect(screen.getByText('براعم أُسوة')).toBeInTheDocument();
+
+    // Cartoon Caravan Trail is rendered
+    expect(screen.getByTestId('caravan-trail')).toBeInTheDocument();
+    expect(screen.getAllByText('🐪').length).toBeGreaterThanOrEqual(3);
+    expect(screen.getByText('⛺')).toBeInTheDocument();
+
+    // Streak badge is rendered with motivational text
+    expect(screen.getByText(/ستريك.*أيام من الاقتداء/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /تسجيل الحضور اليومي|أحسنت/i })).toBeInTheDocument();
 
     // Story and game cards with extra-rounded corners and hover expansion
     const storyLink = screen.getByRole('link', { name: /قصة تفاعلية/i });
@@ -134,6 +143,10 @@ describe('Task 2: Kids Corner Theming & Animated Background (ركن الطفل)'
     expect(gameLink).toBeInTheDocument();
     expect(gameLink.className).toContain('rounded-[2.5rem]');
     expect(gameLink.className).toContain('hover:scale-105');
+
+    // Peer Challenge card is rendered
+    expect(screen.getByText(/تحدي البراعم/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /ابدأ التحدي/i })).toBeInTheDocument();
   });
 
   it('renders StoryPage and GamePage without duplicate Navbar and with KidsAnimatedBackground', () => {
@@ -154,3 +167,4 @@ describe('Task 2: Kids Corner Theming & Animated Background (ركن الطفل)'
     expect(gameContainer.querySelector('.animate-float-gentle')).toBeInTheDocument(); // Moon animation present
   });
 });
+

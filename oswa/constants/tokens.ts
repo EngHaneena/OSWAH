@@ -21,5 +21,5 @@ export const FONTS = {
   brand: "var(--font-aref-ruqaa)",       // Aref Ruqaa — اسم المشروع
   quran: "var(--font-amiri)",            // Amiri — الآيات والنصوص الشرعية
   ui: "var(--font-ibm-plex-arabic)",     // IBM Plex Sans Arabic — الواجهة
-  kids: "var(--font-baloo)",             // Baloo Bhaijaan 2 — ركن الأطفال
+  kids: "var(--font-baloo)",             // Baloo Bhaijaan 2 — براعم أُسوة
 } as const;

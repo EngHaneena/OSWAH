@@ -105,7 +105,7 @@ describe('Requirement 3: Account Form Validation & Privacy Controls', () => {
 
     await waitFor(() => {
       expect(screen.getByText(/اقتراح لطيف يا بطل|A Gentle Suggestion/i)).toBeInTheDocument();
-      expect(screen.getByRole('link', { name: /زيارة ركن الأطفال|Visit Kids Corner/i })).toBeInTheDocument();
+      expect(screen.getByRole('link', { name: /زيارة براعم أُسوة|Visit Oswah Sprouts/i })).toBeInTheDocument();
     });
   });
 

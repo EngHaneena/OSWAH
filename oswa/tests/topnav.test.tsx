@@ -51,7 +51,7 @@ describe('Requirement 1 & 2: TopNav and Mobile Drawer', () => {
 
     // Nav tabs
     expect(screen.getByText('عظة وعبرة')).toBeInTheDocument();
-    expect(screen.getByText('ركن الأطفال')).toBeInTheDocument();
+    expect(screen.getByText('براعم أُسوة')).toBeInTheDocument();
 
     // Language switch button
     const langBtn = screen.getByTitle(/Switch to English|التحويل إلى العربية/i);

@@ -97,8 +97,8 @@ describe('Bilingual Tiles & Navigation Flow Suite', () => {
     expect(wisdomLink).toBeInTheDocument();
     expect(wisdomLink).toHaveAttribute('href', '/wisdom');
 
-    // Destination 2: Kids Corner
-    const kidsLink = screen.getByRole('link', { name: /ركن الأطفال/i });
+    // Destination 2: Oswah Sprouts
+    const kidsLink = screen.getByRole('link', { name: /براعم أُسوة/i });
     expect(kidsLink).toBeInTheDocument();
     expect(kidsLink).toHaveAttribute('href', '/kids');
   });
@@ -114,7 +114,7 @@ describe('Bilingual Tiles & Navigation Flow Suite', () => {
 
     expect(screen.getByText('Choose Your Destination in Oswah')).toBeInTheDocument();
     expect(screen.getByText('Wisdom & Lessons')).toBeInTheDocument();
-    expect(screen.getByText('Kids Corner')).toBeInTheDocument();
+    expect(screen.getByText('Oswah Sprouts')).toBeInTheDocument();
 
     // Close button
     const closeBtn = screen.getByLabelText(/Close/i);

@@ -4,21 +4,23 @@ import React from 'react';
 import Link from 'next/link';
 import { useTranslation } from '@/lib/i18n';
 import KidsAnimatedBackground from '@/components/kids/KidsAnimatedBackground';
+import KidsStreakBadge from '@/components/kids/KidsStreakBadge';
+import SproutsPeerChallenge from '@/components/kids/SproutsPeerChallenge';
 
 export default function KidsMenuPage() {
   const { t, dir, isArabic } = useTranslation();
 
   return (
     <div
-      className="min-h-[calc(100vh-4rem)] bg-gradient-to-br from-[#FEF9C3] via-[#E0F2FE] to-[#FCE7F3] dark:bg-gradient-to-b dark:from-slate-900 dark:via-indigo-950 dark:to-purple-950 relative overflow-hidden flex flex-col items-center justify-center px-4 py-12 transition-colors duration-500"
+      className="min-h-[calc(100vh-4rem)] bg-gradient-to-br from-[#FEF9C3] via-[#E0F2FE] to-[#FCE7F3] dark:bg-gradient-to-b dark:from-slate-900 dark:via-indigo-950 dark:to-purple-950 relative overflow-hidden flex flex-col items-center justify-start px-4 pt-10 pb-44 transition-colors duration-500"
       dir={dir}
     >
-      {/* Cartoon animated elements: drifting clouds, smiling crescent moon, stars, balloons */}
+      {/* Cartoon animated elements: drifting clouds, crescent moon, stars, balloons, desert dunes & caravan trail */}
       <KidsAnimatedBackground />
 
       <main className="relative z-10 max-w-4xl mx-auto w-full flex flex-col items-center">
         {/* Playful Header */}
-        <header className="text-center mb-10 animate-fade-in-up">
+        <header className="text-center mb-6 animate-fade-in-up">
           <div className="inline-flex items-center justify-center gap-2 mb-3 text-4xl sm:text-5xl animate-bounce">
             <span>⭐</span>
             <span className="text-amber-500 dark:text-yellow-300">🎈</span>
@@ -33,14 +35,19 @@ export default function KidsMenuPage() {
           </h1>
 
           <p
-            className="text-lg sm:text-xl md:text-2xl font-bold text-[#1E293B] bg-white/75 dark:bg-[#F5F2EB] px-8 py-3 rounded-full inline-block shadow-md border border-amber-500/20 backdrop-blur-md transition-colors"
+            className="text-lg sm:text-xl md:text-2xl font-bold text-[#1E293B] bg-white/80 dark:bg-[#F5F2EB] px-8 py-3 rounded-full inline-block shadow-md border border-amber-500/20 backdrop-blur-md transition-colors"
             style={{ fontFamily: 'Baloo Bhaijaan 2, cursive' }}
           >
             {t('kids.subtitle')}
           </p>
         </header>
 
-        {/* Kids Action Cards */}
+        {/* Daily Streak Badge */}
+        <div className="w-full max-w-3xl">
+          <KidsStreakBadge />
+        </div>
+
+        {/* Kids Action Cards (Story & Game) */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-3xl">
           {/* Interactive Story Card */}
           <Link
@@ -108,6 +115,9 @@ export default function KidsMenuPage() {
             </div>
           </Link>
         </div>
+
+        {/* Peer Challenge Feature (تحدي البراعم ⚔️) */}
+        <SproutsPeerChallenge />
       </main>
     </div>
   );

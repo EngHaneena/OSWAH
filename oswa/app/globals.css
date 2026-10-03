@@ -188,7 +188,7 @@ html.dark body {
 }
 
 /* ========================================================
-   Kids Corner Animations (Drifting Clouds, Moon, Stars, Balloons)
+   Oswah Sprouts Animations (Drifting Clouds, Moon, Stars, Balloons, Caravan Trail)
    ======================================================== */
 
 @keyframes cloudDrift {
@@ -249,6 +249,52 @@ html.dark body {
   animation: balloonFloat 4s ease-in-out infinite;
 }
 
+@keyframes caravanMoveRTL {
+  0% {
+    transform: translateX(110vw);
+  }
+  100% {
+    transform: translateX(-120vw);
+  }
+}
+
+@keyframes caravanMoveLTR {
+  0% {
+    transform: translateX(-120vw);
+  }
+  100% {
+    transform: translateX(110vw);
+  }
+}
+
+@keyframes camelBob {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-4px) rotate(2deg);
+  }
+  50% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  75% {
+    transform: translateY(-3px) rotate(-2deg);
+  }
+}
+
+.animate-caravan-rtl {
+  animation: caravanMoveRTL 35s linear infinite;
+}
+
+.animate-caravan-ltr {
+  animation: caravanMoveLTR 35s linear infinite;
+}
+
+.animate-camel-step {
+  display: inline-block;
+  animation: camelBob 2s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .tile-floating,
   .animate-prophet-glow,
@@ -258,8 +304,12 @@ html.dark body {
   .animate-cloud-drift-fast,
   .animate-float-gentle,
   .animate-star-twinkle,
-  .animate-balloon-float {
+  .animate-balloon-float,
+  .animate-caravan-rtl,
+  .animate-caravan-ltr,
+  .animate-camel-step {
     animation: none !important;
     transform: none !important;
   }
 }
+
