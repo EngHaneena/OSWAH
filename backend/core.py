@@ -39,6 +39,8 @@ class Settings:
     chat_model: str = _env("OPENAI_CHAT_MODEL", "gpt-4o-mini")
     embed_model: str = _env("OPENAI_EMBED_MODEL", "text-embedding-3-small")
     dorar_api_url: str = _env("DORAR_API_URL", "https://dorar.net/dorar_api.json")
+    # مصدر الأحاديث: "auto" (الدرر، وإن تعذّرت فالقاعدة المحلية) | "local" (المحلية فقط) | "dorar" (الدرر فقط)
+    hadith_source: str = _env("HADITH_SOURCE", "auto")
     dorar_timeout: float = field(default_factory=lambda: float(os.getenv("DORAR_TIMEOUT", "12")))
     allowed_origins: list = field(default_factory=lambda: [o.strip() for o in os.getenv("ALLOWED_ORIGINS", "http://localhost:3000").split(",") if o.strip()])
     shared_secret: str = _env("BACKEND_SHARED_SECRET", "")
@@ -449,7 +451,7 @@ def build_hadith_result(user_text: str, results: list[dict], g: Any) -> dict | N
         "truncated": bool(r.get("truncated")),
         "dorar_url": dorar_search_url(r["hadith_text"]),
         "match_quality": quality,
-        "provider": "الدرر السنية",
+        "provider": r.get("provider") or "الدرر السنية",
     }
 
 
@@ -462,7 +464,7 @@ def public_dorar(r: dict) -> dict:
     return {"type": "hadith", "hadith_text": r["hadith_text"], "truncated": bool(r.get("truncated")), "grade": r.get("grade", ""),
             "status_class": grade_class(r.get("grade", "")), "scholar": r.get("scholar", ""), "narrator": r.get("narrator", ""),
             "source": r.get("source", ""), "reference": r.get("reference", ""), "takhrij": r.get("takhrij", ""),
-            "dorar_url": dorar_search_url(r["hadith_text"]), "provider": "الدرر السنية"}
+            "dorar_url": dorar_search_url(r["hadith_text"]), "provider": r.get("provider") or "الدرر السنية"}
 
 
 QUERY_SYSTEM = """You write SEARCH QUERIES for the Dorar.net hadith encyclopedia (Arabic keyword search over hadith texts).

@@ -20,6 +20,7 @@ from deps import openai_client, require_key, settings  # يحمّل .env أول�
 from core import (build_items, candidate_for_model, classify, clean_values, file_fingerprint, load_excel,
                   public_item, validate_generation, wisdom_system_prompt, wisdom_user_prompt)
 from hadith_check import router as hadith_router, situation_from_dorar
+import local_hadith
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
 log = logging.getLogger("oswah")  # لا نسجّل نصوص المستخدمين أبداً
@@ -76,6 +77,8 @@ def search(text: str, k: int) -> list[tuple[str, float]]:
 # ---------------------------------------------------------------------------
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    if settings.hadith_source != "dorar":  # تحميل قاعدة الأحاديث المحلية (بديل الدرر) في الخلفية حتى لا ينتظرها أول طلب
+        threading.Thread(target=local_hadith.available, daemon=True).start()
     if settings.situation_source == "excel":  # في وضع الدرر لا حاجة لبناء متجهات الإكسل
         try:
             info = build_index()

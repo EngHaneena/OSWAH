@@ -13,6 +13,7 @@ from __future__ import annotations
 import json
 import logging
 import re
+import time
 
 from typing import Optional
 
@@ -25,6 +26,7 @@ from core import (HADITH_CHECK_SYSTEM, dorar_search_url, QUERY_SYSTEM, SITUATION
                   grade_class, hadith_check_user_prompt, norm, parse_dorar_payload, public_dorar, results_for_model,
                   validate_situation, wording_overlap)
 from deps import openai_client, require_key, settings
+import local_hadith
 
 log = logging.getLogger("oswah.dorar")
 router = APIRouter()
@@ -74,7 +76,51 @@ def lexical_queries(text: str) -> list[str]:
     return out[:3]
 
 
+_dorar_down_until = 0.0  # بعد فشل الدرر نذهب للقاعدة المحلية مباشرة لعشر دقائق، فلا ينتظر المستخدم مهلة الاتصال كل مرة
+
+
 def search_dorar(queries: list[str], limit: int = 15, stop_on_first: bool = False) -> list[dict]:
+    """
+    البحث في الدرر، ومع HADITH_SOURCE=auto (الافتراضي): إن تعذّر الوصول إليها نبحث في قاعدة الكتب السبعة المحلية.
+    HADITH_SOURCE=local: المحلية فقط، HADITH_SOURCE=dorar: الدرر فقط.
+    """
+    global _dorar_down_until
+    mode = settings.hadith_source
+    if mode == "local" or (mode == "auto" and time.time() < _dorar_down_until):
+        return search_local(queries, limit, stop_on_first)
+    try:
+        return _search_dorar_api(queries, limit, stop_on_first)
+    except DorarUnavailable:
+        if mode != "auto" or not local_hadith.available():
+            raise
+        _dorar_down_until = time.time() + 600
+        log.warning("dorar unavailable, using local hadith db")
+        return search_local(queries, limit, stop_on_first)
+
+
+def current_provider() -> str:
+    """مصدر النتائج الحالي (للردود الفارغة التي لا تحمل نتائج يُعرف منها المصدر)."""
+    if settings.hadith_source == "local" or (settings.hadith_source == "auto" and time.time() < _dorar_down_until):
+        return local_hadith.PROVIDER
+    return "الدرر السنية"
+
+
+def search_local(queries: list[str], limit: int = 15, stop_on_first: bool = False) -> list[dict]:
+    if not local_hadith.available():
+        raise DorarUnavailable()
+    seen, results = set(), []
+    for q in queries:
+        for rec in local_hadith.search(q, limit):
+            key = (rec["source"], rec["reference"])
+            if key not in seen:
+                seen.add(key)
+                results.append(rec)
+        if (results and stop_on_first) or len(results) >= limit:
+            break
+    return results[:limit]
+
+
+def _search_dorar_api(queries: list[str], limit: int = 15, stop_on_first: bool = False) -> list[dict]:
     seen, results = set(), []
     try:
         with httpx.Client(timeout=settings.dorar_timeout, headers={"User-Agent": "Oswah/1.0 (AI Challenge prototype)"}) as cx:
@@ -124,7 +170,7 @@ def hadith_check(body: HadithIn):
     except DorarUnavailable:
         return JSONResponse(status_code=502, content={"success": False, "input_hadith": text, "result": None, "message": DORAR_DOWN, "error": "dorar_unavailable"})
     if not results:
-        return {"success": False, "input_hadith": text, "result": None, "message": NOT_FOUND, "related": []}
+        return {"success": False, "input_hadith": text, "result": None, "message": NOT_FOUND, "related": [], "provider": current_provider()}
 
     try:
         g = ask_json(HADITH_CHECK_SYSTEM, hadith_check_user_prompt(text, results))
@@ -139,8 +185,8 @@ def hadith_check(body: HadithIn):
     result = build_hadith_result(text, results, g)
     if result is None:
         # لا تطابق موثوق؛ إن كان النص معلومة عن السيرة نعرض الروايات ذات الصلة بأحكامها كما في الدرر
-        return {"success": False, "input_hadith": text, "result": None, "message": NOT_FOUND, "related": related}
-    return {"success": True, "input_hadith": text, "result": result, "related": related}
+        return {"success": False, "input_hadith": text, "result": None, "message": NOT_FOUND, "related": related, "provider": current_provider()}
+    return {"success": True, "input_hadith": text, "result": result, "related": related, "provider": result["provider"]}
 
 
 # ---------------------------------------------------------------------------
@@ -152,6 +198,7 @@ def dorar_record(r: dict) -> dict:
     out["truncated"] = bool(r.get("truncated"))     # الدرر نفسها اختصرت النص بـ «...»
     out["extra"] = r.get("extra") or {}               # أي حقول أخرى ظهرت في رد الدرر بتسمياتها الأصلية
     out["dorar_url"] = dorar_search_url(r["hadith_text"])  # رابط صفحة البحث في الدرر لقراءة النص كاملاً
+    out["provider"] = r.get("provider") or "الدرر السنية"
     return out
 
 
@@ -172,9 +219,9 @@ def hadith_find(body: FindIn):
     except DorarUnavailable:
         return JSONResponse(status_code=502, content={"success": False, "hadith": text, "results": [], "message": DORAR_DOWN, "error": "dorar_unavailable"})
     if not results:
-        return {"success": False, "hadith": text, "results": [], "count": 0, "provider": "الدرر السنية",
-                "message": "لم تُرجع الدرر السنية نتائج لهذا البحث"}
-    return {"success": True, "hadith": text, "count": len(results), "provider": "الدرر السنية",
+        return {"success": False, "hadith": text, "results": [], "count": 0, "provider": current_provider(),
+                "message": "لم نجد نتائج لهذا البحث، جرّب كلمات أخرى من نص الحديث"}
+    return {"success": True, "hadith": text, "count": len(results), "provider": results[0].get("provider") or "الدرر السنية",
             "results": [dorar_record(r) for r in results]}
 
 
@@ -206,7 +253,7 @@ def situation_from_dorar(text: str, lang: str) -> dict:
         return {"success": False, "kind": "no_match", "message": "لم نجد في الدرر السنية رواية ثابتة قريبة مما وصفت. جرّب وصف الموقف بكلمات أخرى."}
     chosen = authentic[g["match_index"]]
     return {
-        "success": True, "kind": "match", "mode": "ai", "source": "dorar",
+        "success": True, "kind": "match", "mode": "ai", "source": "local" if chosen.get("provider") else "dorar",
         "item": public_dorar(chosen),  # النص والحكم والمصدر من الدرر كما هي
         "generated": {"title": g["title"], "empathy": g["empathy"], "lesson": g["lesson"], "practical_step": g.get("practical_step", ""),
                       "actions": g.get("actions", []), "plan_values": clean_values(g.get("plan_values")), "confidence": g.get("confidence")},

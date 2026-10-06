@@ -6,7 +6,8 @@ import json, os, sys, tempfile
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path[:0] = [os.path.join(ROOT, "tests", "stubs"), os.path.join(ROOT, "backend")]
 os.environ.update(EXCEL_PATH=os.path.join(ROOT, "backend", "data", "asowa_complete_integration_.xlsx"), CHROMA_DIR=tempfile.mkdtemp(),
-                  SIMILARITY_THRESHOLD="0.30", BACKEND_SHARED_SECRET="", SITUATION_SOURCE="excel")
+                  SIMILARITY_THRESHOLD="0.30", BACKEND_SHARED_SECRET="", SITUATION_SOURCE="excel",
+                  HADITH_SOURCE="dorar")  # اختبارات الدرر أولاً؛ البديل المحلي يُختبر في آخر الملف
 import openai as fake_openai, httpx as fake_httpx
 import core, main, hadith_check, deps
 from fastapi import HTTPException
@@ -132,6 +133,26 @@ alt = core.parse_dorar_payload({"data": [{"hadith": "إنما الأعمال ب�
 ok("يدعم واجهة JSON منظمة أيضاً", alt and alt[0]["reference"] == "1" and alt[0]["scholar"] == "البخاري")
 jsonp = core.parse_dorar_payload('cb({"ahadith":{"result":"<div class=\\"hadith\\">1 - نص</div><div class=\\"hadith-info\\"><span class=\\"info-subtitle\\">خلاصة حكم المحدث:</span> <span>صحيح</span></div>"}})')
 ok("يدعم ردّ JSONP", jsonp and jsonp[0]["grade"] == "صحيح")
+
+# ---------- البديل المحلي: قاعدة الكتب السبعة حين تتعذّر الدرر ----------
+import local_hadith
+ok("قاعدة الكتب السبعة تُحمَّل (أكثر من 30 ألف حديث)", len(local_hadith._load()) > 30000)
+x = local_hadith.search("إنما الأعمال بالنيات", 3)[0]
+ok("بحث محلي: حديث النية من صحيح البخاري بحكمه", x["source"] == "صحيح البخاري" and x["reference"] == "1" and x["grade"] == "صحيح" and "بالنيات" in core.norm(x["hadith_text"]))
+m, nar = local_hadith.split_matn("حَدَّثَنَا قُتَيْبَةُ، حَدَّثَنَا لَيْثٌ، عَنْ أَبِي هُرَيْرَةَ، أَنَّ رَسُولَ اللَّهِ صلى الله عليه وسلم قَالَ ‏\"‏ لاَ تَغْضَبْ")
+ok("فصل الإسناد: يبدأ النص من الصحابي", m.startswith("عَنْ أَبِي هُرَيْرَةَ") and nar == "أبي هريرة", (m[:30], nar))
+y = local_hadith.search("الراحمون يرحمهم الرحمن", 3)[0]
+ok("أحكام السنن من الألباني", y["scholar"] == "الألباني" and core.grade_class(y["grade"]) == "authentic", (y["source"], y["grade"]))
+deps.settings.hadith_source = "auto"; hadith_check._dorar_down_until = 0; fake_httpx.FAIL["on"] = True
+r = hf(hadith="لا تغضب")
+ok("الدرر متوقفة + وضع auto ← نتائج من القاعدة المحلية", r["success"] and r["provider"] == local_hadith.PROVIDER and r["results"][0]["source"] == "صحيح البخاري")
+fake_httpx.QUERIES.clear(); r = hf(hadith="الدين النصيحة")
+ok("بعد الفشل لا نعيد محاولة الدرر فوراً (لا انتظار)", r["success"] and fake_httpx.QUERIES == [])
+r = hc("قال رسول الله ﷺ: أوصني، قال: لا تغضب، فردد مرارا، قال: لا تغضب")
+ok("«تحقّق» يعمل من القاعدة المحلية", r["success"] and r["result"]["status"] == "صحيح" and r["provider"] == local_hadith.PROVIDER, r.get("result", {}).get("source"))
+fake_httpx.FAIL["on"] = False; hadith_check._dorar_down_until = 0
+ok("حين تعمل الدرر في وضع auto تبقى هي المصدر", hf(hadith="لا تغضب")["provider"] == "الدرر السنية")
+deps.settings.hadith_source = "dorar"
 
 print(f"\n{sum(R)}/{len(R)} passed")
 sys.exit(0 if all(R) else 1)

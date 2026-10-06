@@ -782,8 +782,8 @@ en: {
     tab: { server_down: "تعذّر الاتصال بخادم أُسوة الآن، حاول بعد قليل.", intro: "ماذا تريد أن تفعل؟", back: "رجوع إلى تبيّن وتحقّق",
       o1_t: "أعطني موقفاً مماثلاً من السيرة", o1_d: "اكتب موقفاً أو شعوراً تمر به، ونعرض لك ماذا فعل النبي {pbuh} في موقف مشابه، أو دعاءً من السنة يناسبه.",
       o2_t: "تحقّق من صحة حديث", o2_d: "الصق حديثاً أو رسالة أو لقطة شاشة، فنبيّن لك إن كان صحيحاً أو مغلوطاً، ونعطيك لفظه الصحيح وصورة للمقارنة.",
-      o3_t: "ابحث عن حديث", o3_d: "اكتب نص الحديث أو كلمات منه، ونعرض لك نتائج الموسوعة الحديثية للدرر السنية بنصها وحكم المحدث ومصدرها." },
-    home: { c12_d: "اعرض موقفك لتجد مثله في السيرة، أو تحقّق من صحة حديث، أو ابحث عن حديث في الدرر السنية.", choose: "ماذا تريد اليوم؟", c1_d: "صف تحدياً تمر به، ونعرض موقفاً من السيرة يناسبه مع خطة لـ24 ساعة.", c2_d: "الصق رسالة أو لقطة شاشة فيها حديث منتشر، ونبحث عن مصدره وحكمه.", c3_d: "قصص وألعاب للأطفال من مواقف موثقة.", lib_d: "فوائد مختصرة من مواقف السيرة الموثقة في قاعدتنا.", lib_btn: "افتح المكتبة" },
+      o3_t: "ابحث عن حديث", o3_d: "اكتب نص الحديث أو كلمات منه، ونعرض لك نتائجه من كتب السنة بنصها وحكم المحدث ومصدرها." },
+    home: { c12_d: "اعرض موقفك لتجد مثله في السيرة، أو تحقّق من صحة حديث، أو ابحث عن حديث في كتب السنة.", choose: "ماذا تريد اليوم؟", c1_d: "صف تحدياً تمر به، ونعرض موقفاً من السيرة يناسبه مع خطة لـ24 ساعة.", c2_d: "الصق رسالة أو لقطة شاشة فيها حديث منتشر، ونبحث عن مصدره وحكمه.", c3_d: "قصص وألعاب للأطفال من مواقف موثقة.", lib_d: "فوائد مختصرة من مواقف السيرة الموثقة في قاعدتنا.", lib_btn: "افتح المكتبة" },
     library: { intro: "فوائد مختصرة من المواقف الموثقة. اضغط على أي فائدة لقراءة موقفها كاملاً بنصه ومصدره." },
     studio: { back_result: "رجوع إلى نتيجتك", back_wis: "العودة إلى العظة والعبرة" },
     wis: { intro: "صف موقفاً تمر به أو شعوراً في قلبك (حزن، خوف، غضب، ضيق، رؤية شخص مبتلى…). لا تكتب أسماء أو بيانات شخصية.", placeholder: "مثال: فيني حزن وضيق ولا أعرف السبب… أو: رأيت شخصاً فيه بلاء", from_sunnah: "ذكر ودعاء من السنة", occasion: "المناسبة", adab: "الأدب", fallback_empathy_dua: "نسأل الله أن يفرّج عنك. هذا دعاء من السنة يناسب ما تمر به." },
@@ -831,7 +831,7 @@ en: {
     tab: { server_down: "Couldn’t reach the Oswah server right now; please try again shortly.", intro: "What would you like to do?", back: "Back to Clarify & Verify",
       o1_t: "Show me a similar moment from the Seerah", o1_d: "Describe a situation or feeling you’re going through, and we’ll show what the Prophet {pbuh} did in a similar moment, or a dua from the Sunnah that fits it.",
       o2_t: "Check a hadith", o2_d: "Paste a hadith, a message or a screenshot; we’ll tell you whether it’s authentic or misquoted, and give you its correct wording and a comparison image.",
-      o3_t: "Find a hadith", o3_d: "Write the hadith or some of its words, and we’ll show the results from the Dorar.net hadith encyclopedia with their text, the scholar’s grade and source." },
+      o3_t: "Find a hadith", o3_d: "Write the hadith or some of its words, and we’ll show matching hadiths from the books of Sunnah with their text, the scholar’s grade and source." },
     home: { c12_d: "Find a similar moment in the Seerah, check whether a hadith is authentic, or find a hadith on Dorar.net.", choose: "What would you like today?", c1_d: "Describe a challenge you face; we show a moment from the Seerah that fits, with a 24-hour plan.", c2_d: "Paste a message or screenshot with a viral hadith; we look up its source and grade.", c3_d: "Stories and games for kids, from verified moments.", lib_d: "Short insights from the verified Seerah moments in our database.", lib_btn: "Open the library" },
     library: { intro: "Short insights from verified moments. Tap any insight to read its full moment with original text and source." },
     studio: { back_result: "Back to your result", back_wis: "Back to Guidance" },
@@ -3303,8 +3303,25 @@ function backendResultHTML(d) {
 }
 
 /* ---------- «تحقّق من صحة حديث» و«ابحث عن حديث» عبر الخادم ---------- */
+/* حين تتعذّر الدرر يجيب الخادم من قاعدة الكتب السبعة المحلية (provider ليس «الدرر السنية»)، فنغيّر التسميات حتى لا ننسب النتائج للدرر */
+const LOCAL_LABELS = {
+  ar: { find_dorar_t: "نتائج من كتب السنة ({n})", from_dorar: "من الكتب السبعة: البخاري ومسلم والسنن الأربع والموطأ", related_dorar: "روايات ذات صلة في كتب السنة (الحكم كما ذكره المحدث):",
+    none_dorar: "لم نجده في كتب السنة المتاحة لدينا، ولا نحكم عليه بأنفسنا.", find_none_dorar: "لم نجد نتائج لهذا البحث. جرّب كلمات أخرى من نص الحديث.", c_none: "لم نجده في كتب السنة" },
+  en: { find_dorar_t: "Results from the hadith books ({n})", from_dorar: "From the seven books: Bukhari, Muslim, the four Sunan and the Muwatta", related_dorar: "Related narrations in the hadith books (grade as stated by the scholar):",
+    none_dorar: "We didn’t find it in the hadith books available to us, and we don’t grade it ourselves.", find_none_dorar: "No results for this search. Try other words from the hadith.", c_none: "لم نجده في كتب السنة" },
+};
+const DORAR_LABELS = { ar: {}, en: {} };
+for (const l of ['ar', 'en']) for (const k in LOCAL_LABELS[l]) DORAR_LABELS[l][k] = MESSAGES[l].verify[k];
+function markSource(data) {
+  const r = data && (data.result || (data.results || [])[0] || (data.related || [])[0]);
+  const p = (data && data.provider) || (r && r.provider);
+  if (!p) return;
+  const local = p !== 'الدرر السنية';
+  for (const l of ['ar', 'en']) Object.assign(MESSAGES[l].verify, local ? LOCAL_LABELS[l] : DORAR_LABELS[l]);
+}
 async function backendCheck(text) {
   const { status, data } = await postJSON('/api/hadith-check', { hadith: text });
+  markSource(data);
   if (data && data.success && data.result) {
     const r = data.result;
     const v = { kind: 'hadith', state: B_STATE[r.status_class] || 'unknown', quote: data.input_hadith || text, h: bH(Object.assign({}, r, { grade: r.status })), dorar: true, diff: r.wording === 'different' };
@@ -3316,6 +3333,7 @@ async function backendCheck(text) {
 }
 async function backendFind(q) {
   const { status, data } = await postJSON('/api/hadith-find', { hadith: q });
+  markSource(data);
   if (data && data.error && status >= 400) return { kind: 'notice', html: noticeHTML('warn', t('verify.st_none'), data.message || t('tab.server_down')) };
   return { kind: 'findDorar', q, results: (data && data.results || []).map(bRaw) };
 }
