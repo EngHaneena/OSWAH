@@ -17,7 +17,7 @@
   ·
   <a href="https://oswah-backend.onrender.com/api/health">حالة الخادم</a>
   ·
-  <a href="README-RUN.md">دليل التشغيل المفصّل</a>
+  <a href="Oswah_Presentation.pdf">العرض التقديمي</a>
 </p>
 
 مشروع مشارك في **تحدي الذكاء الاصطناعي في خدمة المحتوى الإسلامي**
@@ -198,7 +198,9 @@ npm run dev
 | `BACKEND_SHARED_SECRET` | الخادم والواجهة | سر مشترك بأحرف إنجليزية، بالقيمة نفسها في الطرفين |
 | `PY_BACKEND_URL` | الواجهة | رابط الخادم، مثل `http://localhost:8000` |
 
-القيم الكاملة في `backend/.env.example` و`frontend/.env.local.example`، والتفاصيل في [README-RUN.md](README-RUN.md).
+القيم الكاملة في `backend/.env.example` و`frontend/.env.local.example`.
+
+> إن ظهرت رسالة «running scripts is disabled» عند `Activate.ps1`، نفّذ مرة واحدة: `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`، أو استخدم موجه الأوامر cmd بالأمر `.venv\Scripts\activate.bat`.
 
 ## النشر
 
