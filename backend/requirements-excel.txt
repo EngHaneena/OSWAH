@@ -1,0 +1,3 @@
+# اختياري: فقط إذا استخدمتم SITUATION_SOURCE=excel (البحث بالمتجهات في ملف الإكسل)
+-r requirements.txt
+chromadb>=0.5

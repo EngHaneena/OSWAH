@@ -1,0 +1,23 @@
+# Render Blueprint: يرفع خادم البايثون (FastAPI) من مجلد backend
+services:
+  - type: web
+    name: oswah-backend
+    runtime: python
+    rootDir: backend
+    plan: free
+    buildCommand: pip install -r requirements-excel.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: SITUATION_SOURCE
+        value: excel
+      - key: OPENAI_EMBED_MODEL
+        value: text-embedding-3-small
+      - key: OPENAI_CHAT_MODEL
+        value: gpt-4o-mini
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: BACKEND_SHARED_SECRET
+        sync: false
