@@ -15,6 +15,8 @@
 <p align="center">
   <a href="https://oswah.vercel.app"><b>جرّب المنصة</b></a>
   ·
+  <a href="docs/oswah-demo.mp4"><b>شاهد الفيديو التوضيحي</b></a>
+  ·
   <a href="https://oswah-backend.onrender.com/api/health">حالة الخادم</a>
   ·
   <a href="README-RUN.md">دليل التشغيل المفصّل</a>
